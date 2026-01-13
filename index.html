@@ -1,1 +1,1517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Conlang Evolution Lab</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --border: #d7dbe2;
+    --text: #1b1e25;
+    --muted: #5c6775;
+    --accent: #2f6feb;
+    --accent-2: #18a957;
+    --danger: #d12c2c;
+    --warning: #d97706;
+    --shadow: 0 8px 24px rgba(24, 36, 54, 0.08);
+    --radius: 10px;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
 
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  header {
+    padding: 18px 24px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  header h1 {
+    margin: 0 0 4px;
+    font-size: 1.4rem;
+  }
+
+  header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    padding: 18px 24px 32px;
+  }
+
+  @media (max-width: 1100px) {
+    main {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .panel h2 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .section {
+    border-top: 1px dashed var(--border);
+    padding-top: 12px;
+  }
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  input, select, textarea, button {
+    font: inherit;
+  }
+
+  input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .row > * {
+    flex: 1 1 160px;
+  }
+
+  button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+
+  button.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  button.secondary {
+    background: var(--accent-2);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  button.danger {
+    background: var(--danger);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .pill {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #34448a;
+    font-size: 0.75rem;
+  }
+
+  .status {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: var(--muted);
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    background: #f8fafc;
+  }
+
+  .table-scroll {
+    max-height: 280px;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .rule-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    background: #fbfbfd;
+  }
+
+  .rule-card header {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rule-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: #e9f5ff;
+    color: #2b5a9f;
+    font-size: 0.75rem;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .stack {
+    display: grid;
+    gap: 10px;
+  }
+
+  .inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.75rem;
+  }
+
+  .log {
+    font-family: "Courier New", monospace;
+    font-size: 0.78rem;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 10px;
+    border-radius: 8px;
+    max-height: 180px;
+    overflow: auto;
+  }
+
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .legend span {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #ecfeff;
+    color: #0e7490;
+    font-size: 0.75rem;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Conlang Evolution Lab</h1>
+    <p>Simulate phonological evolution forward and backward with token-aware IPA handling.</p>
+  </header>
+
+  <main>
+    <section class="panel" id="panel-data">
+      <h2>Project / Data</h2>
+      <div class="section stack">
+        <div class="row">
+          <button class="primary" id="load-preset">Load Preset</button>
+          <button id="save-project">Export Project JSON</button>
+          <button id="import-project">Import Project JSON</button>
+          <input type="file" id="project-file" accept="application/json" hidden />
+        </div>
+        <label for="conlang-json">Conlang JSON</label>
+        <textarea id="conlang-json" placeholder="Paste conlang JSON here"></textarea>
+        <div class="row">
+          <button class="secondary" id="validate-conlang">Validate & Load</button>
+          <button id="export-conlang">Export Conlang JSON</button>
+        </div>
+        <div class="status" id="validation-status">Awaiting conlang JSON.</div>
+      </div>
+
+      <div class="section stack">
+        <h3>Lexicon</h3>
+        <div class="row">
+          <label>Number of words<input type="number" id="lexicon-count" min="1" value="200" /></label>
+          <label>Seed<input type="text" id="lexicon-seed" placeholder="optional" /></label>
+        </div>
+        <label>Meaning list (comma separated)</label>
+        <textarea id="meaning-list" placeholder="sun, moon, water..."></textarea>
+        <div class="row">
+          <button class="primary" id="generate-lexicon">Generate Lexicon</button>
+          <button id="import-lexicon">Import Lexicon CSV</button>
+          <input type="file" id="lexicon-file" accept=".csv" hidden />
+        </div>
+        <div class="row">
+          <button id="export-lexicon-csv">Export Lexicon CSV</button>
+          <button id="export-lexicon-json">Export Lexicon JSON</button>
+        </div>
+        <label>Search</label>
+        <input type="text" id="lexicon-filter" placeholder="filter by meaning or form" />
+        <div class="table-scroll">
+          <table id="lexicon-table">
+            <thead>
+              <tr><th>Meaning</th><th>IPA</th><th>Orthography</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="status" id="lexicon-status">No lexicon yet.</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-timeline">
+      <h2>Evolution Timeline Editor</h2>
+      <div class="section stack">
+        <div class="row">
+          <label>Timeline<select id="timeline-select"></select></label>
+          <button id="new-timeline">New Timeline</button>
+        </div>
+        <div class="row">
+          <button id="add-stage">Add Stage</button>
+          <button id="branch-stage">Branch from Stage</button>
+        </div>
+        <div class="table-scroll">
+          <table id="stage-table">
+            <thead><tr><th>Stage</th><th>Years</th><th>Seed</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section stack">
+        <h3>Stage Settings</h3>
+        <div class="row">
+          <label>Name<input type="text" id="stage-name" /></label>
+          <label>Years Offset<input type="number" id="stage-years" value="0" /></label>
+          <label>Seed Override<input type="text" id="stage-seed" /></label>
+        </div>
+      </div>
+
+      <div class="section stack">
+        <h3>Rule Editor</h3>
+        <div class="row">
+          <label>Rule Library<select id="rule-library"></select></label>
+          <button id="add-rule">Add Rule</button>
+        </div>
+        <div class="row">
+          <button id="add-custom-rule">Add Custom Rule</button>
+          <button id="save-rule-edits">Save Stage Rules</button>
+        </div>
+        <div id="rule-list" class="stack"></div>
+        <div class="status" id="rule-status">Select a stage to edit rules.</div>
+      </div>
+
+      <div class="section stack">
+        <h3>Custom Rule Builder</h3>
+        <div class="row">
+          <label>Rule name<input type="text" id="custom-rule-name" /></label>
+          <label>Direction<select id="custom-rule-direction"><option value="forward">forward</option><option value="bidirectional">bidirectional</option></select></label>
+        </div>
+        <label>Match pattern (JSON)</label>
+        <textarea id="custom-rule-pattern" placeholder='"t" or ["t","s"] or {"seq":["t", {"class":"V"}]}'></textarea>
+        <label>Replace with (JSON)</label>
+        <textarea id="custom-rule-replace" placeholder='"t͡s" or {"seq":["t","s"]}'></textarea>
+        <label>Environment (JSON)</label>
+        <textarea id="custom-rule-env" placeholder='{"before":{"class":"V"},"after":{"boundary":"#"}}'></textarea>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-results">
+      <h2>Results / Compare</h2>
+      <div class="section stack">
+        <div class="row">
+          <label>Branch<select id="branch-select"></select></label>
+          <label>Stage<select id="result-stage-select"></select></label>
+        </div>
+        <div class="row">
+          <button class="primary" id="run-evolution">Evolve to Selected Stage</button>
+          <button id="cancel-run" class="danger">Cancel</button>
+        </div>
+        <div class="row">
+          <label>View<select id="display-mode"><option value="both">IPA + Orthography</option><option value="ipa">IPA only</option><option value="orth">Orthography only</option></select></label>
+        </div>
+      </div>
+
+      <div class="section stack">
+        <h3>Evolved Lexicon</h3>
+        <div class="table-scroll">
+          <table id="evolved-table">
+            <thead><tr><th>Meaning</th><th>IPA</th><th>Orthography</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section stack">
+        <h3>Diff & Stats</h3>
+        <div class="status" id="diff-status">Run evolution to see stats.</div>
+        <div class="legend" id="stats-legend"></div>
+        <div class="log" id="rule-log"></div>
+      </div>
+
+      <div class="section stack">
+        <h3>Backward Reconstruction</h3>
+        <div class="row">
+          <label>Beam width K<input type="number" id="beam-width" value="20" min="1" /></label>
+          <label>Output N<input type="number" id="beam-output" value="5" min="1" /></label>
+        </div>
+        <div class="row">
+          <label>Target ancestor name<input type="text" id="ancestor-name" placeholder="Proto" /></label>
+          <button id="run-backward">Run Reconstruction</button>
+        </div>
+        <div class="table-scroll">
+          <table id="recon-table">
+            <thead><tr><th>Meaning</th><th>Top Candidates (IPA)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section stack">
+        <h3>Debug Tokens</h3>
+        <div class="status" id="token-debug">Token arrays will appear here.</div>
+      </div>
+    </section>
+  </main>
+
+<script>
+(() => {
+  const el = (id) => document.getElementById(id);
+  const uid = () => crypto.randomUUID();
+
+  const defaultPreset = {
+    phonology: {
+      phoneme_inventory: {
+        consonants: ["p","b","t","d","k","g","f","v","s","z","ʃ","ʒ","x","m","n","ɲ","r","l","j","w","t͡s","d͡z","t͡ʃ","d͡ʒ"],
+        vowels: ["a","e","i","o","u","ɨ","ə"]
+      },
+      syllable_templates: {
+        weighted: { "V": 1, "CV": 3, "CVC": 4, "CCV": 3, "CCVC": 2 },
+        allow_non_listed_clusters: false
+      },
+      clusters: {
+        onset: {
+          weighted: { "pr": 3, "tr": 3, "kr": 3, "st": 3, "sk": 3, "ʃt": 2, "ʃkr": 1, "ʃtr": 1, "vst": 1, "vsk": 1, "prv": 1, "czv": 1 }
+        },
+        coda: {
+          weighted: { "st": 2, "sk": 2, "rt": 2, "rk": 2, "nd": 2, "nʲ": 1 }
+        }
+      },
+      constraints: {
+        forbidden_sequences: ["nn", "ʃʒ", "d͡ʒd͡ʒ"],
+        forbidden_word_initial_tokens: ["ŋ"],
+        forbidden_word_final_tokens: ["h"],
+        min_syllables: 1,
+        max_syllables: 4
+      }
+    },
+    orthography: {
+      show_romanization: true,
+      mapping: {
+        "ʃ": "sz",
+        "ʒ": "ż",
+        "t͡ʃ": "cz",
+        "d͡ʒ": "dż",
+        "t͡s": "c",
+        "d͡z": "dz",
+        "ɲ": "ń",
+        "x": "ch",
+        "v": "w",
+        "j": "j",
+        "ɨ": "y",
+        "ə": "e"
+      }
+    },
+    lexicon_generation: {
+      meaning_list: "sun,moon,water,fire,stone,tree,bird,fish,wind,sky,earth,night,day,star,river,hand,foot,eye,heart,bone,house,path,road,child,king,queen,horse,field,salt,milk,seed,grain,storm,rain,snow,ice,smoke,ash,root,leaf,flower,mountain,forest,bridge,fort,market,city,village,friend,enemy,voice,word,language,story,drum,knife,spear,shield,boat,ship,riverbank,meadow,grass,clay,iron,copper,gold,silver,ring,rope,thread,needle,song,dance,breath,spirit,ghost,stormcloud,oak,wolf,bear,fox,boar,deer,goat,sheep,duck,goose,hen,bee,honey,spice,pepper,garlic,onion,bread,beer,cheese,oil,paint,sand,dust,mirror,window,door,roof,wall,plank,bridgewood,coin,law,judge,soldier,arrow,bow,castle,shipyard,harbor,bridgekeeper,herb,medicine,doctor,scribe,scroll,ink,light,shadow,clock,season,spring,summer,autumn,winter,frost,thaw,ember,coal,smile,tears,grief,joy,hope,peace,war,thunder,lightning,fog,clouds",
+      number_of_words: 200,
+      minimum_edit_distance: 1,
+      allow_homophones: false
+    },
+    grammar_morphology_lite: {
+      notes: "Placeholder for morphology data"
+    },
+    evolution: {
+      stress: { type: "penultimate" },
+      default_seed: "slavic-lab",
+      rule_library: [
+        {
+          id: "palatalization",
+          name: "Palatalization before i/j",
+          description: "t,k,g,s,z -> t͡ʃ,t͡ʃ,ʒ,ʃ,ʒ before i or j",
+          enabled: true,
+          probability: 0.85,
+          apply_rate: 1,
+          direction: "bidirectional",
+          match: { seq: ["t", { class: "V" }] },
+          replace: { seq: ["t͡ʃ", { class: "V" }] },
+          environment: { after: { anyOf: ["i", "j"] } }
+        },
+        {
+          id: "voicing-assim",
+          name: "Voicing assimilation",
+          description: "s->z before voiced obs; z->s before voiceless",
+          enabled: true,
+          probability: 0.7,
+          apply_rate: 1,
+          direction: "bidirectional",
+          match: "s",
+          replace: "z",
+          environment: { after: { class: "VOICED_OBS" } }
+        },
+        {
+          id: "devoice-final",
+          name: "Final devoicing",
+          description: "Voiced obstruents -> voiceless / _#",
+          enabled: true,
+          probability: 1,
+          apply_rate: 1,
+          direction: "bidirectional",
+          match: { class: "VOICED_OBS" },
+          replace: { class: "VOICELESS_OBS" },
+          environment: { word_final: true }
+        },
+        {
+          id: "syncope",
+          name: "Syncope",
+          description: "Delete ə in unstressed syllables",
+          enabled: true,
+          probability: 0.4,
+          apply_rate: 0.6,
+          direction: "bidirectional",
+          match: "ə",
+          replace: "",
+          environment: { stress: "unstressed" }
+        },
+        {
+          id: "epenthesis",
+          name: "Epenthesis repair",
+          description: "Insert ɨ between CCC",
+          enabled: true,
+          probability: 0.25,
+          apply_rate: 0.5,
+          direction: "bidirectional",
+          match: { seq: [{ class: "C" }, { class: "C" }, { class: "C" }] },
+          replace: { seq: [{ class: "C" }, "ɨ", { class: "C" }, { class: "C" }] },
+          environment: { syllable_position: "onset" }
+        }
+      ],
+      timelines: [
+        {
+          id: "timeline-main",
+          name: "West Slavic Cluster Madness",
+          base_stage_id: null,
+          stages: [
+            { id: "stage-0", name: "Proto", years: 0, rules: [] },
+            { id: "stage-1", name: "Classical", years: 300, rules: ["palatalization", "voicing-assim"] },
+            { id: "stage-2", name: "Modern", years: 700, rules: ["palatalization", "voicing-assim", "devoice-final", "syncope"] },
+            { id: "stage-3", name: "Future Urban", years: 1000, rules: ["palatalization", "voicing-assim", "devoice-final", "syncope", "epenthesis"] }
+          ]
+        },
+        {
+          id: "timeline-mountain",
+          name: "Mountain Dialect",
+          base_stage_id: "stage-2",
+          stages: [
+            { id: "mountain-0", name: "Proto", years: 0, rules: [] },
+            { id: "mountain-1", name: "Mountain Modern", years: 800, rules: ["palatalization", "voicing-assim", "devoice-final"] }
+          ]
+        }
+      ]
+    }
+  };
+
+  const ProjectState = {
+    conlang: null,
+    classes: {},
+    lexicon: [],
+    lexiconByStage: {},
+    timelines: [],
+    selectedTimelineId: null,
+    selectedStageId: null,
+    branchResults: {},
+    ui: {
+      cancelRequested: false
+    }
+  };
+
+  const rngFactory = (seed) => {
+    let h = 2166136261 >>> 0;
+    const str = seed || Math.random().toString();
+    for (let i = 0; i < str.length; i += 1) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    let state = h >>> 0;
+    return () => {
+      state += 0x6D2B79F5;
+      let t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+
+  const weightedPick = (weights, rand) => {
+    const entries = Object.entries(weights);
+    const total = entries.reduce((sum, [, w]) => sum + Number(w || 0), 0);
+    let roll = rand() * total;
+    for (const [item, weight] of entries) {
+      roll -= Number(weight || 0);
+      if (roll <= 0) return item;
+    }
+    return entries[entries.length - 1]?.[0];
+  };
+
+  const buildTokenList = (conlang) => {
+    const tokens = [...conlang.phonology.phoneme_inventory.consonants, ...conlang.phonology.phoneme_inventory.vowels];
+    return tokens.sort((a, b) => b.length - a.length);
+  };
+
+  const tokenize = (str, tokens) => {
+    const result = [];
+    let i = 0;
+    while (i < str.length) {
+      let matched = false;
+      for (const token of tokens) {
+        if (str.startsWith(token, i)) {
+          result.push(token);
+          i += token.length;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        result.push(str[i]);
+        i += 1;
+      }
+    }
+    return result;
+  };
+
+  const detokenize = (tokens) => tokens.join("");
+
+  const buildClasses = (conlang) => {
+    const consonants = conlang.phonology.phoneme_inventory.consonants;
+    const vowels = conlang.phonology.phoneme_inventory.vowels;
+    const classes = {
+      C: new Set(consonants),
+      V: new Set(vowels),
+      SIBILANT: new Set(["s", "z", "ʃ", "ʒ"]),
+      AFFRICATE: new Set(["t͡s", "d͡z", "t͡ʃ", "d͡ʒ"]),
+      SONORANT: new Set(["m", "n", "ɲ", "r", "l", "j", "w"]),
+      VOICED_OBS: new Set(["b", "d", "g", "v", "z", "ʒ", "d͡z", "d͡ʒ"]),
+      VOICELESS_OBS: new Set(["p", "t", "k", "f", "s", "ʃ", "t͡s", "t͡ʃ", "x"])
+    };
+    return classes;
+  };
+
+  const matchesClass = (token, className) => {
+    const classes = ProjectState.classes;
+    return classes[className]?.has(token);
+  };
+
+  const parsePattern = (pattern) => {
+    if (pattern == null) return [];
+    if (typeof pattern === "string") return [pattern];
+    if (Array.isArray(pattern)) return pattern;
+    if (pattern.seq) return pattern.seq;
+    if (pattern.class) return [{ class: pattern.class }];
+    return [];
+  };
+
+  const tokenMatches = (token, patternItem) => {
+    if (patternItem == null) return false;
+    if (typeof patternItem === "string") return token === patternItem;
+    if (patternItem.class) return matchesClass(token, patternItem.class);
+    return false;
+  };
+
+  const matchSequenceAt = (tokens, seq, index) => {
+    for (let i = 0; i < seq.length; i += 1) {
+      const patternItem = seq[i];
+      const token = tokens[index + i];
+      if (token == null) return false;
+      if (typeof patternItem === "string" && patternItem === "") return false;
+      if (!tokenMatches(token, patternItem)) return false;
+    }
+    return true;
+  };
+
+  const environmentSatisfied = (tokens, index, seqLength, env, stressInfo) => {
+    if (!env) return true;
+    if (env.word_initial && index !== 0) return false;
+    if (env.word_final && index + seqLength !== tokens.length) return false;
+    if (env.before) {
+      const beforeToken = tokens[index - 1];
+      if (!matchEnvToken(beforeToken, env.before, index === 0)) return false;
+    }
+    if (env.after) {
+      const afterToken = tokens[index + seqLength];
+      if (!matchEnvToken(afterToken, env.after, index + seqLength === tokens.length)) return false;
+    }
+    if (env.stress && stressInfo) {
+      if (env.stress !== "any" && stressInfo !== env.stress) return false;
+    }
+    return true;
+  };
+
+  const matchEnvToken = (token, envToken, boundary) => {
+    if (envToken == null) return true;
+    if (envToken.boundary === "#") return boundary === true;
+    if (typeof envToken === "string") return token === envToken;
+    if (Array.isArray(envToken)) return envToken.includes(token);
+    if (envToken.class) return matchesClass(token, envToken.class);
+    if (envToken.anyOf) return envToken.anyOf.some((item) => matchEnvToken(token, item, boundary));
+    return false;
+  };
+
+  const replaceSequence = (tokens, index, seqLength, replacement) => {
+    const replacementSeq = parsePattern(replacement);
+    return [...tokens.slice(0, index), ...replacementSeq, ...tokens.slice(index + seqLength)];
+  };
+
+  const applyRuleToWord = (wordTokens, rule, rand, stressInfo, options) => {
+    if (!rule.enabled) return { tokens: wordTokens, changed: false, count: 0 };
+    const seq = parsePattern(rule.match);
+    if (seq.length === 0) return { tokens: wordTokens, changed: false, count: 0 };
+    const replacements = parsePattern(rule.replace);
+    let tokens = [...wordTokens];
+    let changed = false;
+    let count = 0;
+    const applyRate = rule.apply_rate ?? 1;
+    const probability = rule.probability ?? 1;
+    for (let i = 0; i <= tokens.length - seq.length; i += 1) {
+      if (ProjectState.ui.cancelRequested) break;
+      if (!matchSequenceAt(tokens, seq, i)) continue;
+      if (!environmentSatisfied(tokens, i, seq.length, rule.environment, stressInfo)) continue;
+      if (rand() > probability) continue;
+      if (rand() > applyRate) continue;
+      tokens = replaceSequence(tokens, i, seq.length, replacements);
+      changed = true;
+      count += 1;
+      if (!options.repeat) {
+        i += replacements.length - 1;
+      } else {
+        i = Math.max(-1, i - 1);
+      }
+    }
+    return { tokens, changed, count };
+  };
+
+  const getStressForWord = (conlang, syllableCount, rand) => {
+    const stress = conlang.evolution?.stress?.type || "penultimate";
+    if (stress === "random") return rand() > 0.5 ? "stressed" : "unstressed";
+    if (stress === "initial") return syllableCount === 1 ? "stressed" : "unstressed";
+    if (stress === "final") return syllableCount === 1 ? "stressed" : "unstressed";
+    return "unstressed";
+  };
+
+  const generateSyllable = (conlang, tokens, rand) => {
+    const templates = conlang.phonology.syllable_templates.weighted;
+    const template = weightedPick(templates, rand);
+    const vowels = conlang.phonology.phoneme_inventory.vowels;
+    const consonants = conlang.phonology.phoneme_inventory.consonants;
+    const onsetClusters = conlang.phonology.clusters.onset.weighted;
+    const codaClusters = conlang.phonology.clusters.coda.weighted;
+    const allowNonListed = conlang.phonology.syllable_templates.allow_non_listed_clusters;
+
+    const chooseCluster = (pool, size) => {
+      if (!pool || Object.keys(pool).length === 0 || rand() > 0.7) {
+        if (!allowNonListed) return null;
+        const cluster = [];
+        for (let i = 0; i < size; i += 1) {
+          cluster.push(consonants[Math.floor(rand() * consonants.length)]);
+        }
+        return cluster;
+      }
+      const picked = weightedPick(pool, rand);
+      return tokenize(picked, tokens);
+    };
+
+    const syllable = [];
+    for (const symbol of template) {
+      if (symbol === "C") {
+        syllable.push(consonants[Math.floor(rand() * consonants.length)]);
+      } else if (symbol === "V") {
+        syllable.push(vowels[Math.floor(rand() * vowels.length)]);
+      }
+    }
+
+    if (template.startsWith("CC")) {
+      const cluster = chooseCluster(onsetClusters, 2);
+      if (cluster) {
+        syllable.splice(0, 2, ...cluster);
+      }
+    }
+    if (template.startsWith("CCC")) {
+      const cluster = chooseCluster(onsetClusters, 3);
+      if (cluster) {
+        syllable.splice(0, 3, ...cluster);
+      }
+    }
+    if (template.endsWith("CC")) {
+      const cluster = chooseCluster(codaClusters, 2);
+      if (cluster) {
+        syllable.splice(syllable.length - 2, 2, ...cluster);
+      }
+    }
+    return syllable;
+  };
+
+  const violatesConstraints = (tokens, conlang) => {
+    const constraints = conlang.phonology.constraints;
+    const word = detokenize(tokens);
+    const forbidden = constraints.forbidden_sequences || [];
+    for (const seq of forbidden) {
+      if (word.includes(seq)) return `Forbidden sequence ${seq}`;
+    }
+    if (constraints.forbidden_word_initial_tokens?.includes(tokens[0])) {
+      return `Forbidden initial token ${tokens[0]}`;
+    }
+    if (constraints.forbidden_word_final_tokens?.includes(tokens[tokens.length - 1])) {
+      return `Forbidden final token ${tokens[tokens.length - 1]}`;
+    }
+    return null;
+  };
+
+  const editDistance = (a, b) => {
+    const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+    for (let i = 0; i <= a.length; i += 1) dp[i][0] = i;
+    for (let j = 0; j <= b.length; j += 1) dp[0][j] = j;
+    for (let i = 1; i <= a.length; i += 1) {
+      for (let j = 1; j <= b.length; j += 1) {
+        dp[i][j] = Math.min(
+          dp[i - 1][j] + 1,
+          dp[i][j - 1] + 1,
+          dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+        );
+      }
+    }
+    return dp[a.length][b.length];
+  };
+
+  const generateLexicon = (conlang, count, meaningList, seed) => {
+    const tokens = buildTokenList(conlang);
+    const rand = rngFactory(seed || conlang.evolution?.default_seed || "seed");
+    const lexicon = [];
+    const rejections = { constraint: 0, homophone: 0, edit: 0 };
+    let minEdit = conlang.lexicon_generation.minimum_edit_distance || 1;
+    let allowHomophones = conlang.lexicon_generation.allow_homophones || false;
+    let allowNonListed = conlang.phonology.syllable_templates.allow_non_listed_clusters;
+    let attempts = 0;
+
+    while (lexicon.length < count && attempts < count * 300) {
+      attempts += 1;
+      const syllableCount = Math.max(
+        conlang.phonology.constraints.min_syllables || 1,
+        Math.ceil(rand() * (conlang.phonology.constraints.max_syllables || 3))
+      );
+      let wordTokens = [];
+      for (let i = 0; i < syllableCount; i += 1) {
+        wordTokens = wordTokens.concat(generateSyllable(conlang, tokens, rand));
+      }
+      const constraintIssue = violatesConstraints(wordTokens, conlang);
+      if (constraintIssue) {
+        rejections.constraint += 1;
+        continue;
+      }
+      const wordStr = detokenize(wordTokens);
+      if (!allowHomophones && lexicon.some((entry) => entry.phonemic === wordStr)) {
+        rejections.homophone += 1;
+        continue;
+      }
+      if (minEdit > 0 && lexicon.some((entry) => editDistance(entry.phonemic, wordStr) < minEdit)) {
+        rejections.edit += 1;
+        continue;
+      }
+      const meaning = meaningList[lexicon.length % meaningList.length] || `meaning-${lexicon.length + 1}`;
+      lexicon.push({
+        meaning,
+        phonemic: wordStr,
+        tokens: wordTokens
+      });
+      if (lexicon.length % 50 === 0 && lexicon.length < count) {
+        if (attempts > count * 100) {
+          minEdit = Math.max(0, minEdit - 1);
+          allowHomophones = true;
+          allowNonListed = true;
+          conlang.phonology.syllable_templates.allow_non_listed_clusters = allowNonListed;
+        }
+      }
+    }
+    return { lexicon, rejections, attempts };
+  };
+
+  const renderOrthography = (tokens, conlang) => {
+    const mapping = conlang.orthography?.mapping || {};
+    return tokens.map((tok) => mapping[tok] ?? tok).join("");
+  };
+
+  const validateConlang = (conlang) => {
+    const issues = [];
+    if (!conlang.phonology?.phoneme_inventory?.consonants?.length) {
+      issues.push("Missing consonant inventory");
+    }
+    if (!conlang.phonology?.phoneme_inventory?.vowels?.length) {
+      issues.push("Missing vowel inventory");
+    }
+    const weighted = conlang.phonology?.syllable_templates?.weighted;
+    if (!weighted || Object.keys(weighted).length === 0) {
+      issues.push("Missing syllable templates");
+    }
+    if (!conlang.lexicon_generation) {
+      issues.push("Missing lexicon_generation settings");
+    }
+    return issues;
+  };
+
+  const stageById = (timeline, stageId) => timeline.stages.find((s) => s.id === stageId);
+
+  const resolveRules = (conlang, stage) => {
+    const library = conlang.evolution?.rule_library || [];
+    return stage.rules.map((ruleRef) => {
+      if (typeof ruleRef === "string") {
+        return library.find((rule) => rule.id === ruleRef);
+      }
+      return ruleRef;
+    }).filter(Boolean);
+  };
+
+  const evolveLexicon = async (lexicon, timeline, stageId, seedOverride) => {
+    const conlang = ProjectState.conlang;
+    const targetStage = stageById(timeline, stageId);
+    if (!targetStage) return { lexicon, log: [] };
+    const stageIndex = timeline.stages.findIndex((s) => s.id === targetStage.id);
+    const tokens = buildTokenList(conlang);
+    const baseSeed = seedOverride || targetStage.seed || conlang.evolution?.default_seed || "seed";
+    const rand = rngFactory(baseSeed);
+    const log = [];
+    let current = lexicon.map((entry) => ({ ...entry, tokens: tokenize(entry.phonemic, tokens) }));
+
+    for (let i = 0; i <= stageIndex; i += 1) {
+      const stage = timeline.stages[i];
+      const rules = resolveRules(conlang, stage);
+      for (const rule of rules) {
+        let affected = 0;
+        let replacements = 0;
+        const samples = [];
+        const updated = [];
+        for (const entry of current) {
+          if (ProjectState.ui.cancelRequested) break;
+          const stressInfo = getStressForWord(conlang, entry.tokens.length, rand);
+          const { tokens: newTokens, changed, count } = applyRuleToWord(entry.tokens, rule, rand, stressInfo, { repeat: false });
+          if (changed) {
+            affected += 1;
+            replacements += count;
+            if (samples.length < 3) {
+              samples.push(`${entry.phonemic} → ${detokenize(newTokens)}`);
+            }
+            updated.push({
+              ...entry,
+              tokens: newTokens,
+              phonemic: detokenize(newTokens)
+            });
+          } else {
+            updated.push(entry);
+          }
+        }
+        current = updated;
+        log.push({
+          rule: rule.name,
+          affected,
+          replacements,
+          samples
+        });
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+    }
+    return { lexicon: current, log };
+  };
+
+  const calcStats = (lexicon, baseLexicon) => {
+    const tokens = buildTokenList(ProjectState.conlang);
+    const freq = {};
+    let changed = 0;
+    let totalLength = 0;
+    for (const entry of lexicon) {
+      const tokenList = tokenize(entry.phonemic, tokens);
+      tokenList.forEach((tok) => { freq[tok] = (freq[tok] || 0) + 1; });
+      totalLength += tokenList.length;
+    }
+    if (baseLexicon) {
+      for (let i = 0; i < lexicon.length; i += 1) {
+        if (lexicon[i].phonemic !== baseLexicon[i]?.phonemic) changed += 1;
+      }
+    }
+    const avgLength = lexicon.length ? (totalLength / lexicon.length).toFixed(2) : 0;
+    return { freq, changed, avgLength };
+  };
+
+  const invertRule = (rule) => {
+    if (rule.direction !== "bidirectional") return null;
+    return {
+      ...rule,
+      match: rule.replace,
+      replace: rule.match,
+      name: `${rule.name} (inverse)`
+    };
+  };
+
+  const scoreCandidate = (tokens) => {
+    const violation = violatesConstraints(tokens, ProjectState.conlang);
+    return violation ? -5 : 1;
+  };
+
+  const applyInverseRule = (tokens, rule) => {
+    const seq = parsePattern(rule.match);
+    const results = [];
+    for (let i = 0; i <= tokens.length - seq.length; i += 1) {
+      if (matchSequenceAt(tokens, seq, i)) {
+        const replaced = replaceSequence(tokens, i, seq.length, rule.replace);
+        results.push(replaced);
+      }
+    }
+    return results.length ? results : [tokens];
+  };
+
+  const reconstruct = (lexicon, timeline, stageId, beamWidth, outputN) => {
+    const stage = stageById(timeline, stageId);
+    if (!stage) return [];
+    const stageIndex = timeline.stages.findIndex((s) => s.id === stageId);
+    const rulesForward = timeline.stages
+      .slice(0, stageIndex + 1)
+      .flatMap((s) => resolveRules(ProjectState.conlang, s));
+    const inverseRules = rulesForward
+      .map(invertRule)
+      .filter(Boolean)
+      .reverse();
+
+    const tokensList = buildTokenList(ProjectState.conlang);
+
+    return lexicon.map((entry) => {
+      let beam = [{ tokens: tokenize(entry.phonemic, tokensList), score: 0 }];
+      for (const rule of inverseRules) {
+        const expanded = [];
+        for (const candidate of beam) {
+          const variants = applyInverseRule(candidate.tokens, rule);
+          for (const variant of variants) {
+            expanded.push({ tokens: variant, score: candidate.score + scoreCandidate(variant) });
+          }
+        }
+        expanded.sort((a, b) => b.score - a.score);
+        beam = expanded.slice(0, beamWidth);
+      }
+      const top = beam.slice(0, outputN).map((candidate) => ({
+        form: detokenize(candidate.tokens),
+        score: candidate.score
+      }));
+      return { meaning: entry.meaning, candidates: top };
+    });
+  };
+
+  const renderLexiconTable = (lexicon, tableId, displayMode) => {
+    const tbody = el(tableId).querySelector("tbody");
+    tbody.innerHTML = "";
+    lexicon.forEach((entry) => {
+      const row = document.createElement("tr");
+      const ipa = entry.phonemic;
+      const orth = renderOrthography(entry.tokens || tokenize(entry.phonemic, buildTokenList(ProjectState.conlang)), ProjectState.conlang);
+      row.innerHTML = `<td>${entry.meaning}</td>`;
+      if (displayMode !== "orth") {
+        row.innerHTML += `<td>${ipa}</td>`;
+      } else {
+        row.innerHTML += `<td class="muted">(hidden)</td>`;
+      }
+      if (displayMode !== "ipa") {
+        row.innerHTML += `<td>${orth}</td>`;
+      } else {
+        row.innerHTML += `<td class="muted">(hidden)</td>`;
+      }
+      tbody.appendChild(row);
+    });
+  };
+
+  const updateTokenDebug = () => {
+    const tokens = buildTokenList(ProjectState.conlang);
+    const sample = ProjectState.lexicon.slice(0, 5).map((entry) => {
+      const tokenized = tokenize(entry.phonemic, tokens);
+      return `${entry.phonemic} => [${tokenized.join(" ")}]`;
+    }).join("\n");
+    el("token-debug").textContent = sample || "No lexicon yet.";
+  };
+
+  const loadPreset = () => {
+    el("conlang-json").value = JSON.stringify(defaultPreset, null, 2);
+    loadConlangFromTextarea();
+  };
+
+  const loadConlangFromTextarea = () => {
+    try {
+      const parsed = JSON.parse(el("conlang-json").value);
+      const issues = validateConlang(parsed);
+      if (issues.length) {
+        el("validation-status").textContent = `Errors:\n${issues.join("\n")}`;
+        return;
+      }
+      ProjectState.conlang = parsed;
+      ProjectState.classes = buildClasses(parsed);
+      ProjectState.timelines = parsed.evolution?.timelines || [];
+      ProjectState.selectedTimelineId = ProjectState.timelines[0]?.id || null;
+      el("validation-status").textContent = "Conlang loaded successfully.";
+      refreshTimelineUI();
+    } catch (err) {
+      el("validation-status").textContent = `JSON parse error: ${err.message}`;
+    }
+  };
+
+  const refreshTimelineUI = () => {
+    const select = el("timeline-select");
+    select.innerHTML = "";
+    ProjectState.timelines.forEach((timeline) => {
+      const option = document.createElement("option");
+      option.value = timeline.id;
+      option.textContent = timeline.name;
+      select.appendChild(option);
+    });
+    if (ProjectState.selectedTimelineId) {
+      select.value = ProjectState.selectedTimelineId;
+    }
+    renderStages();
+    refreshRuleLibrary();
+  };
+
+  const renderStages = () => {
+    const timeline = ProjectState.timelines.find((t) => t.id === ProjectState.selectedTimelineId);
+    const tbody = el("stage-table").querySelector("tbody");
+    tbody.innerHTML = "";
+    if (!timeline) return;
+    timeline.stages.forEach((stage) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${stage.name}</td><td>${stage.years}</td><td>${stage.seed || ""}</td>`;
+      row.addEventListener("click", () => selectStage(stage.id));
+      tbody.appendChild(row);
+    });
+    selectStage(timeline.stages[0]?.id);
+    refreshBranchSelect();
+  };
+
+  const selectStage = (stageId) => {
+    const timeline = ProjectState.timelines.find((t) => t.id === ProjectState.selectedTimelineId);
+    if (!timeline) return;
+    const stage = stageById(timeline, stageId);
+    if (!stage) return;
+    ProjectState.selectedStageId = stageId;
+    el("stage-name").value = stage.name;
+    el("stage-years").value = stage.years;
+    el("stage-seed").value = stage.seed || "";
+    renderRuleList(stage);
+    refreshResultStageSelect();
+  };
+
+  const renderRuleList = (stage) => {
+    const list = el("rule-list");
+    list.innerHTML = "";
+    const rules = resolveRules(ProjectState.conlang, stage);
+    rules.forEach((rule, idx) => {
+      const card = document.createElement("div");
+      card.className = "rule-card";
+      card.innerHTML = `
+        <header>
+          <div>
+            <strong>${rule.name}</strong>
+            <span class="chip">${rule.direction}</span>
+          </div>
+          <div class="rule-actions">
+            <button data-action="up">↑</button>
+            <button data-action="down">↓</button>
+            <button data-action="toggle">${rule.enabled ? "Disable" : "Enable"}</button>
+            <button data-action="remove">Remove</button>
+          </div>
+        </header>
+        <p class="muted">${rule.description || ""}</p>
+        <label>Probability <input type="number" min="0" max="1" step="0.05" value="${rule.probability}" data-field="probability" /></label>
+        <label>Apply rate <input type="number" min="0" max="1" step="0.05" value="${rule.apply_rate}" data-field="apply_rate" /></label>
+      `;
+      card.querySelectorAll("button").forEach((btn) => {
+        btn.addEventListener("click", () => handleRuleAction(stage, idx, btn.dataset.action));
+      });
+      card.querySelectorAll("input[data-field]").forEach((input) => {
+        input.addEventListener("change", () => {
+          rule[input.dataset.field] = Number(input.value);
+        });
+      });
+      list.appendChild(card);
+    });
+    el("rule-status").textContent = rules.length ? "" : "No rules in this stage.";
+  };
+
+  const handleRuleAction = (stage, index, action) => {
+    if (action === "remove") {
+      stage.rules.splice(index, 1);
+    }
+    if (action === "toggle") {
+      const rule = resolveRules(ProjectState.conlang, stage)[index];
+      rule.enabled = !rule.enabled;
+    }
+    if (action === "up" && index > 0) {
+      const temp = stage.rules[index - 1];
+      stage.rules[index - 1] = stage.rules[index];
+      stage.rules[index] = temp;
+    }
+    if (action === "down" && index < stage.rules.length - 1) {
+      const temp = stage.rules[index + 1];
+      stage.rules[index + 1] = stage.rules[index];
+      stage.rules[index] = temp;
+    }
+    renderRuleList(stage);
+  };
+
+  const refreshRuleLibrary = () => {
+    const select = el("rule-library");
+    select.innerHTML = "";
+    const library = ProjectState.conlang?.evolution?.rule_library || [];
+    library.forEach((rule) => {
+      const option = document.createElement("option");
+      option.value = rule.id;
+      option.textContent = rule.name;
+      select.appendChild(option);
+    });
+  };
+
+  const refreshBranchSelect = () => {
+    const select = el("branch-select");
+    select.innerHTML = "";
+    ProjectState.timelines.forEach((timeline) => {
+      const option = document.createElement("option");
+      option.value = timeline.id;
+      option.textContent = timeline.name;
+      select.appendChild(option);
+    });
+    select.value = ProjectState.selectedTimelineId;
+  };
+
+  const refreshResultStageSelect = () => {
+    const timeline = ProjectState.timelines.find((t) => t.id === ProjectState.selectedTimelineId);
+    if (!timeline) return;
+    const select = el("result-stage-select");
+    select.innerHTML = "";
+    timeline.stages.forEach((stage) => {
+      const option = document.createElement("option");
+      option.value = stage.id;
+      option.textContent = stage.name;
+      select.appendChild(option);
+    });
+    select.value = ProjectState.selectedStageId || timeline.stages[0]?.id;
+  };
+
+  const updateStageFromForm = () => {
+    const timeline = ProjectState.timelines.find((t) => t.id === ProjectState.selectedTimelineId);
+    if (!timeline) return;
+    const stage = stageById(timeline, ProjectState.selectedStageId);
+    if (!stage) return;
+    stage.name = el("stage-name").value;
+    stage.years = Number(el("stage-years").value || 0);
+    stage.seed = el("stage-seed").value || null;
+    renderStages();
+  };
+
+  const addCustomRule = () => {
+    const name = el("custom-rule-name").value || `Custom ${Date.now()}`;
+    let match;
+    let replace;
+    let env;
+    try {
+      match = JSON.parse(el("custom-rule-pattern").value);
+      replace = JSON.parse(el("custom-rule-replace").value);
+      env = JSON.parse(el("custom-rule-env").value || "{}");
+    } catch (err) {
+      alert(`Invalid JSON in rule builder: ${err.message}`);
+      return;
+    }
+    const rule = {
+      id: uid(),
+      name,
+      description: "Custom rule",
+      enabled: true,
+      probability: 1,
+      apply_rate: 1,
+      direction: el("custom-rule-direction").value,
+      match,
+      replace,
+      environment: env
+    };
+    ProjectState.conlang.evolution.rule_library.push(rule);
+    refreshRuleLibrary();
+  };
+
+  const generateLexiconHandler = () => {
+    if (!ProjectState.conlang) return;
+    const count = Number(el("lexicon-count").value || 100);
+    const seed = el("lexicon-seed").value;
+    const meaningList = (el("meaning-list").value || ProjectState.conlang.lexicon_generation.meaning_list || "").split(",").map((m) => m.trim()).filter(Boolean);
+    const result = generateLexicon(ProjectState.conlang, count, meaningList.length ? meaningList : ["thing"], seed);
+    ProjectState.lexicon = result.lexicon;
+    renderLexiconTable(ProjectState.lexicon, "lexicon-table", "both");
+    el("lexicon-status").textContent = `Generated ${result.lexicon.length} words. Attempts: ${result.attempts}. Rejections: ${JSON.stringify(result.rejections)}`;
+    updateTokenDebug();
+  };
+
+  const exportLexiconCSV = () => {
+    if (!ProjectState.lexicon.length) return;
+    const rows = ["meaning,phonemic,orthography"];
+    ProjectState.lexicon.forEach((entry) => {
+      const orth = renderOrthography(entry.tokens || tokenize(entry.phonemic, buildTokenList(ProjectState.conlang)), ProjectState.conlang);
+      rows.push(`${entry.meaning},${entry.phonemic},${orth}`);
+    });
+    downloadFile(rows.join("\n"), "lexicon.csv", "text/csv");
+  };
+
+  const exportLexiconJSON = () => {
+    if (!ProjectState.lexicon.length) return;
+    downloadFile(JSON.stringify(ProjectState.lexicon, null, 2), "lexicon.json", "application/json");
+  };
+
+  const importLexiconCSV = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const lines = reader.result.split(/\r?\n/).filter(Boolean);
+      const entries = [];
+      for (let i = 1; i < lines.length; i += 1) {
+        const [meaning, phonemic] = lines[i].split(",");
+        if (!meaning || !phonemic) continue;
+        entries.push({ meaning, phonemic, tokens: tokenize(phonemic, buildTokenList(ProjectState.conlang)) });
+      }
+      ProjectState.lexicon = entries;
+      renderLexiconTable(ProjectState.lexicon, "lexicon-table", "both");
+      el("lexicon-status").textContent = `Imported ${entries.length} words.`;
+      updateTokenDebug();
+    };
+    reader.readAsText(file);
+  };
+
+  const downloadFile = (content, filename, type) => {
+    const blob = new Blob([content], { type });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  const runEvolution = async () => {
+    if (!ProjectState.lexicon.length) return;
+    const timeline = ProjectState.timelines.find((t) => t.id === el("branch-select").value);
+    if (!timeline) return;
+    ProjectState.ui.cancelRequested = false;
+    const stageId = el("result-stage-select").value;
+    const { lexicon, log } = await evolveLexicon(ProjectState.lexicon, timeline, stageId);
+    ProjectState.lexiconByStage[stageId] = lexicon;
+    renderLexiconTable(lexicon, "evolved-table", el("display-mode").value);
+    const stats = calcStats(lexicon, ProjectState.lexicon);
+    el("diff-status").textContent = `Changed ${stats.changed}/${lexicon.length} words. Avg length: ${stats.avgLength} tokens.`;
+    el("stats-legend").innerHTML = Object.entries(stats.freq).slice(0, 12).map(([tok, count]) => `<span>${tok}:${count}</span>`).join("");
+    el("rule-log").textContent = log.map((entry) => `Rule ${entry.rule}: ${entry.affected} words, ${entry.replacements} replacements. Samples: ${entry.samples.join("; ")}`).join("\n");
+  };
+
+  const runBackward = () => {
+    const timeline = ProjectState.timelines.find((t) => t.id === el("branch-select").value);
+    const stageId = el("result-stage-select").value;
+    const lexicon = ProjectState.lexiconByStage[stageId] || ProjectState.lexicon;
+    const beamWidth = Number(el("beam-width").value || 20);
+    const outputN = Number(el("beam-output").value || 5);
+    const results = reconstruct(lexicon, timeline, stageId, beamWidth, outputN);
+    const tbody = el("recon-table").querySelector("tbody");
+    tbody.innerHTML = "";
+    results.forEach((row) => {
+      const tr = document.createElement("tr");
+      const candidates = row.candidates.map((c) => `${c.form} (${c.score})`).join(" | ");
+      tr.innerHTML = `<td>${row.meaning}</td><td>${candidates}</td>`;
+      tbody.appendChild(tr);
+    });
+  };
+
+  const exportProject = () => {
+    if (!ProjectState.conlang) return;
+    const project = {
+      conlang: ProjectState.conlang,
+      lexicon: ProjectState.lexicon,
+      timelines: ProjectState.timelines,
+      lexiconByStage: ProjectState.lexiconByStage
+    };
+    downloadFile(JSON.stringify(project, null, 2), "project.json", "application/json");
+  };
+
+  const importProject = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = JSON.parse(reader.result);
+      ProjectState.conlang = data.conlang;
+      ProjectState.lexicon = data.lexicon || [];
+      ProjectState.timelines = data.timelines || [];
+      ProjectState.lexiconByStage = data.lexiconByStage || {};
+      ProjectState.classes = buildClasses(ProjectState.conlang);
+      el("conlang-json").value = JSON.stringify(ProjectState.conlang, null, 2);
+      el("validation-status").textContent = "Project imported.";
+      refreshTimelineUI();
+      renderLexiconTable(ProjectState.lexicon, "lexicon-table", "both");
+    };
+    reader.readAsText(file);
+  };
+
+  el("load-preset").addEventListener("click", loadPreset);
+  el("validate-conlang").addEventListener("click", loadConlangFromTextarea);
+  el("generate-lexicon").addEventListener("click", generateLexiconHandler);
+  el("export-lexicon-csv").addEventListener("click", exportLexiconCSV);
+  el("export-lexicon-json").addEventListener("click", exportLexiconJSON);
+  el("import-lexicon").addEventListener("click", () => el("lexicon-file").click());
+  el("lexicon-file").addEventListener("change", (event) => importLexiconCSV(event.target.files[0]));
+  el("lexicon-filter").addEventListener("input", (event) => {
+    const term = event.target.value.toLowerCase();
+    const filtered = ProjectState.lexicon.filter((entry) => entry.meaning.toLowerCase().includes(term) || entry.phonemic.toLowerCase().includes(term));
+    renderLexiconTable(filtered, "lexicon-table", "both");
+  });
+  el("save-project").addEventListener("click", exportProject);
+  el("import-project").addEventListener("click", () => el("project-file").click());
+  el("project-file").addEventListener("change", (event) => importProject(event.target.files[0]));
+  el("export-conlang").addEventListener("click", () => {
+    if (!ProjectState.conlang) return;
+    downloadFile(JSON.stringify(ProjectState.conlang, null, 2), "conlang.json", "application/json");
+  });
+
+  el("timeline-select").addEventListener("change", (event) => {
+    ProjectState.selectedTimelineId = event.target.value;
+    renderStages();
+  });
+
+  el("new-timeline").addEventListener("click", () => {
+    const timeline = { id: uid(), name: `Timeline ${ProjectState.timelines.length + 1}`, base_stage_id: null, stages: [] };
+    ProjectState.timelines.push(timeline);
+    ProjectState.selectedTimelineId = timeline.id;
+    refreshTimelineUI();
+  });
+
+  el("add-stage").addEventListener("click", () => {
+    const timeline = ProjectState.timelines.find((t) => t.id === ProjectState.selectedTimelineId);
+    if (!timeline) return;
+    const stage = { id: uid(), name: `Stage ${timeline.stages.length}`, years: 0, rules: [] };
+    timeline.stages.push(stage);
+    renderStages();
+  });
+
+  el("branch-stage").addEventListener("click", () => {
+    const timeline = ProjectState.timelines.find((t) => t.id === ProjectState.selectedTimelineId);
+    const stage = stageById(timeline, ProjectState.selectedStageId);
+    if (!stage) return;
+    const branch = {
+      id: uid(),
+      name: `${stage.name} Branch`,
+      base_stage_id: stage.id,
+      stages: [
+        { id: uid(), name: "Proto", years: 0, rules: [] },
+        { id: uid(), name: `${stage.name} Dialect`, years: stage.years + 100, rules: [...stage.rules] }
+      ]
+    };
+    ProjectState.timelines.push(branch);
+    refreshTimelineUI();
+  });
+
+  el("add-rule").addEventListener("click", () => {
+    const timeline = ProjectState.timelines.find((t) => t.id === ProjectState.selectedTimelineId);
+    const stage = stageById(timeline, ProjectState.selectedStageId);
+    if (!stage) return;
+    const ruleId = el("rule-library").value;
+    stage.rules.push(ruleId);
+    renderRuleList(stage);
+  });
+
+  el("add-custom-rule").addEventListener("click", addCustomRule);
+  el("save-rule-edits").addEventListener("click", updateStageFromForm);
+  el("stage-name").addEventListener("input", updateStageFromForm);
+  el("stage-years").addEventListener("input", updateStageFromForm);
+  el("stage-seed").addEventListener("input", updateStageFromForm);
+
+  el("run-evolution").addEventListener("click", runEvolution);
+  el("cancel-run").addEventListener("click", () => { ProjectState.ui.cancelRequested = true; });
+  el("display-mode").addEventListener("change", () => {
+    const stageId = el("result-stage-select").value;
+    const lexicon = ProjectState.lexiconByStage[stageId] || [];
+    if (lexicon.length) {
+      renderLexiconTable(lexicon, "evolved-table", el("display-mode").value);
+    }
+  });
+  el("run-backward").addEventListener("click", runBackward);
+
+  loadPreset();
+})();
+</script>
+</body>
+</html>
